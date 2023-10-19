@@ -104,7 +104,9 @@ namespace TP3.Controllers
             {
                 return NotFound();
             }
+
             var voyage = await _context.Voyage.FindAsync(id);
+
             if (voyage == null)
             {
                 return NotFound();

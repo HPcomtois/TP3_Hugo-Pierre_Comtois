@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {Component, OnInit} from '@angular/core';
+import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {NgForm} from "@angular/forms";
+import {ActivatedRoute} from "@angular/router";
 
 class Voyage {
   constructor(
@@ -14,23 +16,46 @@ class Voyage {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
   title = 'TP3_Voyages';
-  voyages: Voyage[] = [];
-  newVoyage = new Voyage(0, "Colo", "");
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient, private route: ActivatedRoute) { }
 
-  getVoyages(){
-    this.http.get<Voyage[]>('http://localhost:5042/api/Voyages/GetVoyage').subscribe(res => {
-      console.log(res)
-      this.voyages = res;
-    });
+  // callapi(){
+  //   let token = localStorage.getItem('token');
+  //
+  //   let httpOptions = {
+  //     headers: new HttpHeaders( {
+  //       'Content-Type': 'application/json',
+  //       Authorization: 'Bearer ' + token
+  //     })
+  //   };
+  //
+  //   this.http.get<any>('http://localhost:5042/api/Voyages', httpOptions).subscribe(res =>
+  //     console.log(res)
+  //   );
+  // }
+
+  // addcat(){
+  //   let token = localStorage.getItem('token');
+  //
+  //   let httpOptions = {
+  //     headers: new HttpHeaders( {
+  //       'Content-Type': 'application/json',
+  //       Authorization: 'Bearer ' + token
+  //     })
+  //   };
+  //
+  //   this.http.post<any>('http://localhost:5042/api/Voyages', httpOptions).subscribe(res =>
+  //     console.log(res)
+  //   );
+  // }
+
+  logout(){
+    localStorage.removeItem('token');
   }
 
-  sendVoyage() {
-    this.http.post<Voyage[]>('http://localhost:5042/api/voyages/PostVoyage', this.newVoyage).subscribe(res => {
-      console.log(res);
-    })
+  ngOnInit(): void {
+
   }
 }

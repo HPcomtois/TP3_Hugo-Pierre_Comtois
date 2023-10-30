@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TP3.Data;
@@ -10,36 +13,41 @@ using TP3.Models;
 
 namespace TP3.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class VoyagesController : ControllerBase
     {
         private readonly TP3Context _context;
+        UserManager<User> userManager;
 
-        public VoyagesController(TP3Context context)
+        public VoyagesController(TP3Context context, UserManager<User> userManager)
         {
             _context = context;
+            this.userManager = userManager;
         }
 
         // GET: api/Voyages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyage()
         {
-          if (_context.Voyage == null)
-          {
-              return NotFound();
-          }
-            return await _context.Voyage.ToListAsync();
+            if (_context.Voyage == null)
+            {
+                return NotFound();
+            }
+            List<Voyage> voyages = await _context.Voyage.ToListAsync();
+
+            return voyages;
         }
 
         // GET: api/Voyages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Voyage>> GetVoyage(int id)
         {
-          if (_context.Voyage == null)
-          {
-              return NotFound();
-          }
+            if (_context.Voyage == null)
+            {
+                return NotFound();
+            }
             var voyage = await _context.Voyage.FindAsync(id);
 
             if (voyage == null)
@@ -86,11 +94,14 @@ namespace TP3.Controllers
         [HttpPost]
         public async Task<ActionResult<Voyage>> PostVoyage(Voyage voyage)
         {
-          if (_context.Voyage == null)
-          {
-              return Problem("Entity set 'TP3Context.Voyage'  is null.");
-          }
+            if (_context.Voyage == null)
+            {
+                return Problem("Entity set 'TP3Context.Voyage'  is null.");
+            }
+            string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User user = _context.Users.Single(u => u.Id == userid);
             _context.Voyage.Add(voyage);
+            voyage.User = user;
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);

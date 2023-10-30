@@ -1,0 +1,19 @@
+.card{
+    border: 5px solid black;
+    width: fit-content;
+    height: auto;
+    padding: 2%;
+    margin: 0 40%;
+    display: inline-grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.content{
+    display: inline-flex;
+    justify-content: center;
+}
+
+.conn{
+    display: grid;
+}

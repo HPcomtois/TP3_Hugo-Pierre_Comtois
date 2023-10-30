@@ -1,0 +1,16 @@
+<br><br>
+<div class="card">
+  <div class="content">
+    <div class="conn">
+      <form #connexion="ngForm" (ngSubmit)="login(connexion)" noValidate>
+        <h1>Nom</h1>
+        <input name="nom_user" type="text" placeholder="nom user" ngModel required #nom_user='ngModel'>
+        <br><br>
+        <h1>Mot de Passe</h1>
+        <input name="mdp_user" type="password" placeholder="password user" ngModel required #mdp_user='ngModel'>
+        <br><br>
+        <button>Connexion</button>
+      </form>
+    </div>
+  </div>
+</div>

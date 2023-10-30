@@ -1,0 +1,22 @@
+<br><br>
+<div class="card">
+    <div class="content">
+        <div class="conn">
+            <form #inscription="ngForm" (ngSubmit)="register(inscription)" noValidate>
+                <h1>Nom</h1>
+                <input name="nom_user" type="text" placeholder="nom user" ngModel required #nom_user='ngModel'>
+                <br><br>
+                <h1>Email</h1>
+                <input name="email_user" type="email" placeholder="email user" ngModel required #email_user='ngModel'>
+                <br><br>
+                <h1>Mot de Passe</h1>
+                <input name="mdp_user" type="password" placeholder="password user" ngModel required #mdp_user='ngModel'>
+                <br><br>
+                <h1>Confirmer le mot de passe</h1>
+                <input name="mdpConfirm_user" type="password" placeholder="confirm password user" ngModel required #mdpConfirm_user='ngModel'>
+                <br><br>
+                <button>Inscription</button>
+            </form>
+        </div>
+    </div>
+</div>

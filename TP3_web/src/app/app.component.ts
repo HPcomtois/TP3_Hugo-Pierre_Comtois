@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
 import {ActivatedRoute} from "@angular/router";
+import {BehaviorSubject} from "rxjs";
 
 class Voyage {
   constructor(
@@ -18,6 +19,8 @@ class Voyage {
 })
 export class AppComponent implements OnInit{
   title = 'TP3_Voyages';
+  connection:Boolean = false;
+  StatusConnection :BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(false);
 
   constructor(public http: HttpClient, private route: ActivatedRoute) { }
 
@@ -52,10 +55,25 @@ export class AppComponent implements OnInit{
   // }
 
   logout(){
-    localStorage.removeItem('token');
+    if(localStorage.getItem('token')){
+      this.StatusConnection.next(false);
+      localStorage.removeItem('token');
+    }
+    else{
+      this.StatusConnection.next(true);
+    }
+  }
+
+  ifConnected(){
+    if(localStorage.getItem('token')){
+      this.StatusConnection.next(true);
+    }
   }
 
   ngOnInit(): void {
-
+      this.StatusConnection.subscribe(value => {
+        this.connection = value;
+      })
+    this.ifConnected();
   }
 }

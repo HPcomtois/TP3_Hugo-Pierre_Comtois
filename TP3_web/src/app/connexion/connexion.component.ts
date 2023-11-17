@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {NgForm} from "@angular/forms";
 import {HttpClient} from "@angular/common/http";
+import {AppComponent} from "../app.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-connexion',
@@ -9,7 +11,7 @@ import {HttpClient} from "@angular/common/http";
 })
 export class ConnexionComponent {
 
-  constructor(public http: HttpClient) { }
+  constructor(public http: HttpClient, public App: AppComponent, public router: Router) { }
 
   login(connexion: NgForm){
     let user = {
@@ -21,5 +23,7 @@ export class ConnexionComponent {
       localStorage.setItem('token', res.token);
     });
     connexion.resetForm();
+    this.App.StatusConnection.next(!this.App.StatusConnection.value);
+    this.router.navigate(['/']);
   }
 }

@@ -4,6 +4,6 @@ namespace TP3.Models
 {
 	public class User : IdentityUser
 	{
-		public virtual List<Voyage>? Voyages { get; set; }
+		public virtual List<Voyage> Voyages { get; set; } = null!;
     }
 }

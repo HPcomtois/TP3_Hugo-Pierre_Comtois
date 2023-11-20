@@ -1,5 +1,5 @@
 <nav style="background-color: darkcyan">
-  <a [routerLink]="['/']"><h1 class="nav-item">Mes Valises</h1></a>
+  <a [routerLink]="['/voyages']"><h1 class="nav-item">Mes Valises</h1></a>
   <button [hidden]="connection" [routerLink]="['/connexion']" class="nav-item">Connexion</button>
   <button [hidden]="!connection" (click)="logout()">Déconnexion</button>
   <button [routerLink]="['/inscription']" class="nav-item">Inscription</button>

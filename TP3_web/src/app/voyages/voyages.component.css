@@ -1,0 +1,21 @@
+.card{
+  border: 5px solid black;
+  width: fit-content;
+  height: auto;
+  padding: 2%;
+  margin: 1%;
+  display: grid;
+  grid-auto-columns: 1fr 1fr 1fr;
+  justify-content: center;
+  align-items: center;
+  background-color: darkcyan;
+}
+
+.content{
+  display: inline-flex;
+  justify-content: center;
+}
+
+.conn{
+  display: grid;
+}

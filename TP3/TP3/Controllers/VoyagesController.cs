@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Protocol.Plugins;
 using TP3.Data;
 using TP3.Models;
 
@@ -35,10 +36,16 @@ namespace TP3.Controllers
             {
                 return NotFound();
             }
-            List<Voyage> voyages = await _context.Voyage.ToListAsync();
+			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			User user = _context.Users.Single(u => u.Id == userid);
 
-            return voyages;
-        }
+            if(user != null)
+            {
+                return user.Voyages;
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Utilisateur non trouvé." });
+		}
 
         // GET: api/Voyages/5
         [HttpGet("{id}")]
@@ -98,29 +105,40 @@ namespace TP3.Controllers
             {
                 return Problem("Entity set 'TP3Context.Voyage'  is null.");
             }
+
             string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
             User user = _context.Users.Single(u => u.Id == userid);
-            _context.Voyage.Add(voyage);
-            voyage.User = user;
-            await _context.SaveChangesAsync();
+            if(user != null)
+            {
+                voyage.User = user;
+                user.Voyages.Add(voyage);
 
-            return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);
+				_context.Voyage.Add(voyage);
+				await _context.SaveChangesAsync();
+
+				return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);
+			}
+
+            return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Utilisateur non trouvé." });
         }
 
         // DELETE: api/Voyages/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVoyage(int id)
         {
-            if (_context.Voyage == null)
+			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			User user = _context.Users.Single(u => u.Id == userid);
+
+            var voyage = await _context.Voyage.FindAsync(id);
+
+			if (_context.Voyage == null || user == null || voyage == null)
             {
                 return NotFound();
             }
 
-            var voyage = await _context.Voyage.FindAsync(id);
-
-            if (voyage == null)
+            if (!user.Voyages.Contains(voyage))
             {
-                return NotFound();
+                return Unauthorized(new { Message = "Ce Voyage ne t'appartient pas."});
             }
 
             _context.Voyage.Remove(voyage);

@@ -1,14 +1,17 @@
 import { Component } from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
+import {User} from "../voyages/voyages.component";
 
 @Component({
   selector: 'app-inscription',
   templateUrl: './inscription.component.html',
   styleUrls: ['./inscription.component.css']
 })
+
 export class InscriptionComponent {
 
+  users: User[] = [];
   constructor(public http: HttpClient) { }
 
   register(inscription: NgForm){
@@ -21,6 +24,7 @@ export class InscriptionComponent {
     this.http.post<any>('http://localhost:5042/api/Account/Register', user).subscribe(res =>
         console.log(res)
     );
+    this.users.push(user);
     inscription.resetForm();
   }
 }

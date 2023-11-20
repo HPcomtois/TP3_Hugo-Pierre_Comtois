@@ -110,7 +110,7 @@ namespace TP3.Controllers
             User user = _context.Users.Single(u => u.Id == userid);
             if(user != null)
             {
-                voyage.User = user;
+                voyage.Users.Add(user);
                 user.Voyages.Add(voyage);
 
 				_context.Voyage.Add(voyage);

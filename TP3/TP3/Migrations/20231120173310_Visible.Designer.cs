@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP3.Data;
 
@@ -10,9 +11,11 @@ using TP3.Data;
 namespace TP3.Migrations
 {
     [DbContext(typeof(TP3Context))]
-    partial class TP3ContextModelSnapshot : ModelSnapshot
+    [Migration("20231120173310_Visible")]
+    partial class Visible
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,7 +227,9 @@ namespace TP3.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
-                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UserId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("Visible")
@@ -232,22 +237,9 @@ namespace TP3.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Voyage");
-                });
-
-            modelBuilder.Entity("UserVoyage", b =>
-                {
-                    b.Property<string>("UsersId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("VoyagesId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("UsersId", "VoyagesId");
-
-                    b.HasIndex("VoyagesId");
-
-                    b.ToTable("UserVoyage");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -301,19 +293,18 @@ namespace TP3.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UserVoyage", b =>
+            modelBuilder.Entity("TP3.Models.Voyage", b =>
                 {
-                    b.HasOne("TP3.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("TP3.Models.User", "User")
+                        .WithMany("Voyages")
+                        .HasForeignKey("UserId");
 
-                    b.HasOne("TP3.Models.Voyage", null)
-                        .WithMany()
-                        .HasForeignKey("VoyagesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("TP3.Models.User", b =>
+                {
+                    b.Navigation("Voyages");
                 });
 #pragma warning restore 612, 618
         }

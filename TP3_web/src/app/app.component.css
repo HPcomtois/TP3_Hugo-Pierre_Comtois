@@ -1,9 +1,30 @@
+nav{
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  background-color: darkcyan;
+  .buttons{
+    display: flex;
+    padding-left: 50%;
+    & button {
+      margin: 1%;
+      padding: 10px;
+    }
+  }
+}
+
 nav>a>h1{
   color: white;
   font-size: 48px;
-  margin-left: 10px;
+  padding-left: 120px;
 }
+
 a{
   text-decoration: none;
+}
+
+body{
+  background-color: darkgray;
+  padding: 2%;
 }
 

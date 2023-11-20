@@ -6,22 +6,44 @@
         <h2>Ajouter un Voyage</h2>
         <input name="nom_voyage" type="text" placeholder="nom voyage" ngModel required #nom_voyage='ngModel'>
         <br><br>
-        <button [hidden]="!app.connection">Ajouter ce Voyage</button>
+        <button [hidden]="!app.connection">Ajouter ce voyage</button>
         <div [hidden]="app.connection">Connectez-vous pour ajouter un voyage</div>
       </form>
     </div>
   </div>
 </div>
-<div *ngFor="let voyage of this.voyages" [hidden]="!app.connection">
+<div *ngFor="let voyage of this.voyages" [hidden]="!this.app.connection">
+    <div class="card">
+      <div class="content">
+        <div class="conn">
+          <h2>{{voyage.name}}</h2>
+          <br><br>
+          <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
+          <div class="button">
+            <button (click)="delete(voyage.id)">Supprimer</button>
+            <button>Partager</button>
+            <button (click)="rendrePublic(voyage.id)">Rendre le voyage publique</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+<h2>Voyages Publiques :</h2>
+<div *ngFor="let voyage of JSON.parse(localStorage.getItem('voyagesPublic')!)">
   <div class="card">
     <div class="content">
       <div class="conn">
         <h2>{{voyage.name}}</h2>
         <br><br>
         <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
-        <button (click)="delete(voyage.id)">Supprimer</button>
-        <button>Partager</button>
+        <div class="button">
+          <button (click)="deletePublic(voyage.id)">Supprimer Le voyage publique</button>
+          <button (click)="rendrePublic(voyage.id)">Rendre le voyage privé</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
+
+
+

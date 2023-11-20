@@ -19,7 +19,7 @@
         <h2>{{voyage.name}}</h2>
         <br><br>
         <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
-        <button>Supprimer</button>
+        <button (click)="delete(voyage.id)">Supprimer</button>
         <button>Partager</button>
       </div>
     </div>

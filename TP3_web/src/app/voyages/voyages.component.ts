@@ -31,21 +31,6 @@ export class VoyagesComponent implements OnInit{
   voyages: Voyage[] = [];
 
   constructor(public http: HttpClient, public app: AppComponent){ }
-  addvoyage(addVoyage: NgForm){
-
-    let voyage: Voyage = {
-      id: 0,
-      name: addVoyage.value.nom_voyage,
-      img: "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
-    }
-
-    this.http.post<Voyage>('http://localhost:5042/api/Voyages', voyage)
-        .subscribe(res =>
-      console.log(res)
-    );
-    this.voyages.push(voyage);
-    addVoyage.resetForm();
-  }
 
   async getVoyages(): Promise<void> {
       let res = await  lastValueFrom(this.http.get<Voyage[]>(
@@ -54,7 +39,24 @@ export class VoyagesComponent implements OnInit{
       this.voyages = res;
   }
 
-  
+  async delete(inputId : number): Promise<void> {
+    let res = await lastValueFrom(this.http.delete<Voyage>('http://localhost:5042/api/Voyages/' + inputId))
+    console.log(res)
+    this.getVoyages()
+  }
+
+  async addvoyage(addVoyage: NgForm): Promise<void> {
+
+    let voyage: Voyage = {
+      id: 0,
+      name: addVoyage.value.nom_voyage,
+      img: "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
+    }
+    let res = await lastValueFrom(this.http.post<Voyage>('http://localhost:5042/api/Voyages', voyage))
+    console.log(res);
+    addVoyage.resetForm();
+    this.getVoyages()
+  }
 
   ngOnInit(): void {
       this.getVoyages();

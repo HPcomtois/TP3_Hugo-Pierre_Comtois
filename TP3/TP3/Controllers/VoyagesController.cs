@@ -144,7 +144,7 @@ namespace TP3.Controllers
             _context.Voyage.Remove(voyage);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(new {Message = "Voyage supprimé."});
         }
 
         private bool VoyageExists(int id)

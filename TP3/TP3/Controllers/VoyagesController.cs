@@ -36,16 +36,48 @@ namespace TP3.Controllers
             {
                 return NotFound();
             }
-			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			User user = _context.Users.Single(u => u.Id == userid);
+            string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            User user = _context.Users.Single(u => u.Id == userid);
 
-            if(user != null)
+            if (user != null)
             {
                 return user.Voyages;
             }
 
             return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Utilisateur non trouvé." });
-		}
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyagePublique()
+        {
+            if (_context.Voyage == null)
+            {
+                return NotFound();
+            }
+
+            List<User> users = await _context.Users.ToListAsync();
+            List<Voyage> voyages = new List<Voyage>();
+
+            if (users != null)
+            {
+                foreach (var user in users)
+                {
+                    for (int i = 0; i < user.Voyages.Count; i++)
+                    {
+                        if (user.Voyages[i].Visible && !voyages.Contains(user.Voyages[i]))
+                        {
+                            voyages.Add(user.Voyages[i]);
+                        }
+                    }
+                }
+                return voyages;
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest, new { Message = "La liste est vide." });
+        }
+
+
 
         // GET: api/Voyages/5
         [HttpGet("{id}")]
@@ -65,36 +97,31 @@ namespace TP3.Controllers
             return voyage;
         }
 
-        // PUT: api/Voyages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutVoyage(int id, Voyage voyage)
+		public async Task<IActionResult> Partager(int id, string email)
         {
-            if (id != voyage.Id)
+            User user = await _context.Users.Where(res => res.Email == email).FirstOrDefaultAsync();
+            if(user == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(voyage).State = EntityState.Modified;
-
-            try
+            var voyage = await _context.Voyage.FindAsync(id);
+            if (voyage == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!VoyageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
-            return NoContent();
-        }
+            if (user.Voyages.Contains(voyage))
+            {
+				return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Le user a déjà ce voyage." });
+			}
+            else
+            {
+				user.Voyages.Add(voyage);
+				return Ok(new {Message = "Voyage ajouté à l'utilisateur."} );
+			}
+		}
 
         // POST: api/Voyages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754

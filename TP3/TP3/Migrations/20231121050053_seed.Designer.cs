@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP3.Data;
 
@@ -10,9 +11,11 @@ using TP3.Data;
 namespace TP3.Migrations
 {
     [DbContext(typeof(TP3Context))]
-    partial class TP3ContextModelSnapshot : ModelSnapshot
+    [Migration("20231121050053_seed")]
+    partial class seed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -217,15 +220,15 @@ namespace TP3.Migrations
                         {
                             Id = "11111111-1111-1111-1111-111111111111",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "916ba4c0-5bca-41d1-97d0-211a13881617",
+                            ConcurrencyStamp = "9eed3ec8-5a12-4c06-b175-09075ff488e6",
                             Email = "candyCruise@mail.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedEmail = "CANDYCRUISE@MAIL.COM",
                             NormalizedUserName = "BIGBOY32",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOIf8QyLkfjAeeCTw03e4JALbHM9yhLbkUM5QU14iEraEwiwJnj/6Lfu0YA73Ka+ww==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKuQxJSNmhxg+3pZdHuStVtyjmLl0h1SSZIuczxOhiI9GNyVWKVJe9DWphTC/hFUMw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "91cd9591-2ce4-4fc7-bfc3-865489b7707a",
+                            SecurityStamp = "c8463b9a-7dfd-40e0-82d7-27ed9c2cbaa1",
                             TwoFactorEnabled = false,
                             UserName = "Bigboy32"
                         });

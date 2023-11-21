@@ -3,8 +3,11 @@
   <div class="content">
     <div class="conn">
       <form #addVoyage="ngForm" (ngSubmit)="addvoyage(addVoyage)" noValidate>
-        <h2>Ajouter un Voyage</h2>
+        <h2>Ajouter un voyage</h2>
         <input name="nom_voyage" type="text" placeholder="nom voyage" ngModel required #nom_voyage='ngModel'>
+        <br><br>
+        <h2>Visibilité du voyage</h2>
+        <input name="visibilite" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="public" required>
         <br><br>
         <button [hidden]="!app.connection">Ajouter ce voyage</button>
         <div [hidden]="app.connection">Connectez-vous pour ajouter un voyage</div>
@@ -21,25 +24,25 @@
           <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
           <div class="button">
             <button (click)="delete(voyage.id)">Supprimer</button>
-            <button>Partager</button>
-            <button (click)="rendrePublic(voyage.id)">Rendre le voyage publique</button>
+            <form #email="ngForm" (ngSubmit)="partager(voyage.id, email)" novalidate>
+              <input name="value_email" type="text"
+                     placeholder="Email de l'utilisateur" required ngModel #value_email='ngModel'>
+              <button>Partager</button>
+            </form>
           </div>
         </div>
       </div>
     </div>
 </div>
+<br>
 <h2>Voyages Publiques :</h2>
-<div *ngFor="let voyage of JSON.parse(localStorage.getItem('voyagesPublic')!)">
+<div *ngFor="let voyage of this.voyagesPublic">
   <div class="card">
     <div class="content">
       <div class="conn">
         <h2>{{voyage.name}}</h2>
         <br><br>
         <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
-        <div class="button">
-          <button (click)="deletePublic(voyage.id)">Supprimer Le voyage publique</button>
-          <button (click)="rendrePublic(voyage.id)">Rendre le voyage privé</button>
-        </div>
       </div>
     </div>
   </div>

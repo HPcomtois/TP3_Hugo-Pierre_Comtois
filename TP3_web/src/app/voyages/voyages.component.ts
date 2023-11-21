@@ -30,8 +30,9 @@ export class VoyagesComponent implements OnInit{
 
   token: string | null = sessionStorage.getItem('token');
   voyages: Voyage[] = [];
-  voyagesPubliques: Voyage[] = [];
-  voyage: any = {id:0 , name: "", img: "", visible: false};
+  voyagesPublic: Voyage[] = [];
+  public: boolean = true;
+  email_value: string = "";
   constructor(public http: HttpClient, public app: AppComponent){ }
   async getVoyages(): Promise<void> {
       let res = await  lastValueFrom(this.http.get<Voyage[]>(
@@ -40,16 +41,19 @@ export class VoyagesComponent implements OnInit{
       this.voyages = res;
   }
 
-  async delete(inputId : number): Promise<void> {
-    let res = await lastValueFrom(this.http.delete<Voyage>('http://localhost:5042/api/Voyages/' + inputId))
-    console.log(res)
-    this.getVoyages()
+  async getVoyagesPubliques(): Promise<void>{
+    let res = await lastValueFrom(this.http.get<Voyage[]>(
+      "http://localhost:5042/api/Voyages/GetVoyagePublique"));
+    console.log(res);
+    this.voyagesPublic = res;
   }
 
-  async deletePublic(item_id : number){
-    this.voyagesPubliques = JSON.parse(localStorage.getItem('voyagesPublic')!);
-    this.voyagesPubliques = this.voyagesPubliques.splice(item_id, 1);
-    localStorage.setItem('voyagesPublic', JSON.stringify(this.voyagesPubliques));
+  async delete(inputId : number): Promise<void> {
+    let res = await lastValueFrom(this.http.delete<Voyage>(
+        'http://localhost:5042/api/Voyages/' + inputId));
+    console.log(res);
+    this.getVoyages();
+    this.getVoyagesPubliques();
   }
 
   async addvoyage(addVoyage: NgForm): Promise<void> {
@@ -58,34 +62,26 @@ export class VoyagesComponent implements OnInit{
       id: 0,
       name: addVoyage.value.nom_voyage,
       img: "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
-      visible: false
+      visible: this.public
     }
     let res = await lastValueFrom(this.http.post<Voyage>('http://localhost:5042/api/Voyages', voyage))
     console.log(res);
     addVoyage.resetForm();
-    this.getVoyages()
+    this.getVoyages();
+    this.getVoyagesPubliques();
   }
 
-  async rendrePublic(inputId : number): Promise<void> {
-    let voyage = await lastValueFrom(this.http.get<Voyage>('http://localhost:5042/api/Voyages/' + inputId))
-    this.voyage = voyage;
-    this.voyage.visible = !this.voyage.visible;
-    if(localStorage.getItem('voyagesPublic') == null){
-      localStorage.setItem('voyagesPublic', JSON.stringify(this.voyagesPubliques!));
-    }
-    else if (this.voyage.visible){
-      this.voyagesPubliques.push(this.voyage);
-      localStorage.setItem('voyagesPublic', JSON.stringify(this.voyagesPubliques));
-    }
-    else{
-      this.voyages.push(voyage);
-    }
+  async partager(InputId: number, email: NgForm){
+    let res = await lastValueFrom(this.http.put<Voyage[]>(
+      'http://localhost:5042/api/Voyages/' + InputId, email.value.value_email));
+    console.log(res);
+    email.resetForm();
+    this.getVoyages();
+    this.getVoyagesPubliques();
   }
 
   ngOnInit(): void {
       this.getVoyages();
+      this.getVoyagesPubliques();
   }
-
-  protected readonly localStorage = localStorage;
-  protected readonly JSON = JSON;
 }

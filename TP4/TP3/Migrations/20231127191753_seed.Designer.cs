@@ -11,8 +11,8 @@ using TP3.Data;
 namespace TP3.Migrations
 {
     [DbContext(typeof(TP3Context))]
-    [Migration("20231120194724_newList")]
-    partial class newList
+    [Migration("20231127191753_seed")]
+    partial class seed
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -214,6 +214,24 @@ namespace TP3.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "11111111-1111-1111-1111-111111111111",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5a8f918e-e420-405b-b525-fad6e6e16706",
+                            Email = "candyCruise@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CANDYCRUISE@MAIL.COM",
+                            NormalizedUserName = "BIGBOY32",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJ1P1QUJidgKrO7wrvyQQx/uSxCQoqgaVoqyAIPNpVj0aAeOdvw1yRU7N41jdA5YUg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "35afec16-7c52-458f-83fc-91e04c88c060",
+                            TwoFactorEnabled = false,
+                            UserName = "Bigboy32"
+                        });
                 });
 
             modelBuilder.Entity("TP3.Models.Voyage", b =>
@@ -236,6 +254,22 @@ namespace TP3.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Voyage");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Img = "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
+                            Name = "Allemagne",
+                            Visible = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Img = "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
+                            Name = "Algérie",
+                            Visible = false
+                        });
                 });
 
             modelBuilder.Entity("UserVoyage", b =>
@@ -251,6 +285,18 @@ namespace TP3.Migrations
                     b.HasIndex("VoyagesId");
 
                     b.ToTable("UserVoyage");
+
+                    b.HasData(
+                        new
+                        {
+                            UsersId = "11111111-1111-1111-1111-111111111111",
+                            VoyagesId = 1
+                        },
+                        new
+                        {
+                            UsersId = "11111111-1111-1111-1111-111111111111",
+                            VoyagesId = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

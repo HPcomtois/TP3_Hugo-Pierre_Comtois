@@ -119,6 +119,7 @@ namespace TP3.Controllers
             else
             {
 				user.Voyages.Add(voyage);
+                await _context.SaveChangesAsync();
 				return Ok(new {Message = "Voyage ajouté à l'utilisateur."} );
 			}
 		}

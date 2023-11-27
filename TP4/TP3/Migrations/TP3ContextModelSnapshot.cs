@@ -2,7 +2,6 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP3.Data;
 
@@ -11,11 +10,9 @@ using TP3.Data;
 namespace TP3.Migrations
 {
     [DbContext(typeof(TP3Context))]
-    [Migration("20231030172054_User")]
-    partial class User
+    partial class TP3ContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -214,6 +211,24 @@ namespace TP3.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "11111111-1111-1111-1111-111111111111",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "5a8f918e-e420-405b-b525-fad6e6e16706",
+                            Email = "candyCruise@mail.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CANDYCRUISE@MAIL.COM",
+                            NormalizedUserName = "BIGBOY32",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJ1P1QUJidgKrO7wrvyQQx/uSxCQoqgaVoqyAIPNpVj0aAeOdvw1yRU7N41jdA5YUg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "35afec16-7c52-458f-83fc-91e04c88c060",
+                            TwoFactorEnabled = false,
+                            UserName = "Bigboy32"
+                        });
                 });
 
             modelBuilder.Entity("TP3.Models.Voyage", b =>
@@ -227,16 +242,58 @@ namespace TP3.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("TEXT");
+                    b.Property<bool>("Visible")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Voyage");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Img = "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
+                            Name = "Allemagne",
+                            Visible = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Img = "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
+                            Name = "Algérie",
+                            Visible = false
+                        });
+                });
+
+            modelBuilder.Entity("UserVoyage", b =>
+                {
+                    b.Property<string>("UsersId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("VoyagesId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("UsersId", "VoyagesId");
+
+                    b.HasIndex("VoyagesId");
+
+                    b.ToTable("UserVoyage");
+
+                    b.HasData(
+                        new
+                        {
+                            UsersId = "11111111-1111-1111-1111-111111111111",
+                            VoyagesId = 1
+                        },
+                        new
+                        {
+                            UsersId = "11111111-1111-1111-1111-111111111111",
+                            VoyagesId = 2
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -290,18 +347,19 @@ namespace TP3.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TP3.Models.Voyage", b =>
+            modelBuilder.Entity("UserVoyage", b =>
                 {
-                    b.HasOne("TP3.Models.User", "User")
-                        .WithMany("Voyages")
-                        .HasForeignKey("UserId");
+                    b.HasOne("TP3.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("TP3.Models.User", b =>
-                {
-                    b.Navigation("Voyages");
+                    b.HasOne("TP3.Models.Voyage", null)
+                        .WithMany()
+                        .HasForeignKey("VoyagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

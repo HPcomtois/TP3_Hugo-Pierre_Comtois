@@ -50,6 +50,7 @@ namespace TP3.Data
             builder.Entity<Voyage>()
                 .HasMany(u => u.Users)
                 .WithMany(v => v.Voyages)
+
                 .UsingEntity(e =>
                 {
                     e.HasData(new { UsersId = u1.Id, VoyagesId = 1 });

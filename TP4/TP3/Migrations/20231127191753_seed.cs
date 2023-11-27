@@ -3,20 +3,16 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TP3.Migrations
 {
     /// <inheritdoc />
-    public partial class User : Migration
+    public partial class seed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "UserId",
-                table: "Voyage",
-                type: "TEXT",
-                nullable: true);
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -54,6 +50,21 @@ namespace TP3.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Voyage",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false),
+                    Img = table.Column<string>(type: "TEXT", nullable: false),
+                    Visible = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Voyage", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -162,10 +173,52 @@ namespace TP3.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateIndex(
-                name: "IX_Voyage_UserId",
+            migrationBuilder.CreateTable(
+                name: "UserVoyage",
+                columns: table => new
+                {
+                    UsersId = table.Column<string>(type: "TEXT", nullable: false),
+                    VoyagesId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserVoyage", x => new { x.UsersId, x.VoyagesId });
+                    table.ForeignKey(
+                        name: "FK_UserVoyage_AspNetUsers_UsersId",
+                        column: x => x.UsersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserVoyage_Voyage_VoyagesId",
+                        column: x => x.VoyagesId,
+                        principalTable: "Voyage",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetUsers",
+                columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
+                values: new object[] { "11111111-1111-1111-1111-111111111111", 0, "5a8f918e-e420-405b-b525-fad6e6e16706", "candyCruise@mail.com", false, false, null, "CANDYCRUISE@MAIL.COM", "BIGBOY32", "AQAAAAIAAYagAAAAEJ1P1QUJidgKrO7wrvyQQx/uSxCQoqgaVoqyAIPNpVj0aAeOdvw1yRU7N41jdA5YUg==", null, false, "35afec16-7c52-458f-83fc-91e04c88c060", false, "Bigboy32" });
+
+            migrationBuilder.InsertData(
                 table: "Voyage",
-                column: "UserId");
+                columns: new[] { "Id", "Img", "Name", "Visible" },
+                values: new object[,]
+                {
+                    { 1, "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg", "Allemagne", true },
+                    { 2, "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg", "Algérie", false }
+                });
+
+            migrationBuilder.InsertData(
+                table: "UserVoyage",
+                columns: new[] { "UsersId", "VoyagesId" },
+                values: new object[,]
+                {
+                    { "11111111-1111-1111-1111-111111111111", 1 },
+                    { "11111111-1111-1111-1111-111111111111", 2 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -204,21 +257,15 @@ namespace TP3.Migrations
                 column: "NormalizedUserName",
                 unique: true);
 
-            migrationBuilder.AddForeignKey(
-                name: "FK_Voyage_AspNetUsers_UserId",
-                table: "Voyage",
-                column: "UserId",
-                principalTable: "AspNetUsers",
-                principalColumn: "Id");
+            migrationBuilder.CreateIndex(
+                name: "IX_UserVoyage_VoyagesId",
+                table: "UserVoyage",
+                column: "VoyagesId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_Voyage_AspNetUsers_UserId",
-                table: "Voyage");
-
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -235,18 +282,16 @@ namespace TP3.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "UserVoyage");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
 
-            migrationBuilder.DropIndex(
-                name: "IX_Voyage_UserId",
-                table: "Voyage");
-
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "Voyage");
+            migrationBuilder.DropTable(
+                name: "Voyage");
         }
     }
 }

@@ -23,6 +23,7 @@
           <br><br>
           <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
           <div class="button">
+            <button [routerLink]="['/voyage', voyage.id]">Ajouter des photos au voyage</button>
             <button (click)="delete(voyage.id)">Supprimer</button>
             <form #email="ngForm" (ngSubmit)="partager(voyage.id, email)" novalidate>
               <input name="value_email" type="text"

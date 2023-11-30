@@ -4,7 +4,7 @@ import {NgForm} from "@angular/forms";
 import {AppComponent} from "../app.component";
 import {lastValueFrom} from "rxjs";
 
-class Voyage {
+ export class Voyage {
   constructor(
     public id: number,
     public name: string,

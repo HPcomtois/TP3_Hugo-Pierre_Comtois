@@ -10,13 +10,15 @@ import { InscriptionComponent } from './inscription/inscription.component';
 import { VoyagesComponent } from './voyages/voyages.component';
 import {NgOptimizedImage} from "@angular/common";
 import {AuthInterceptor} from "./auth.interceptor";
+import { VoyagePhotoComponent } from './voyage-photo/voyage-photo.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ConnexionComponent,
     InscriptionComponent,
-    VoyagesComponent
+    VoyagesComponent,
+    VoyagePhotoComponent
   ],
     imports: [
         BrowserModule,
@@ -26,7 +28,8 @@ import {AuthInterceptor} from "./auth.interceptor";
             {path: '', redirectTo: '/voyages', pathMatch: 'full'},
             {path: 'connexion', component: ConnexionComponent},
             {path: 'inscription', component: InscriptionComponent},
-            {path: 'voyages', component: VoyagesComponent}
+            {path: 'voyages', component: VoyagesComponent},
+            {path: 'voyage/:id', component: VoyagePhotoComponent}
         ]),
         NgOptimizedImage
     ],

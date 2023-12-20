@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TP3.Controllers;
 using TP3.Data;
 using TP3.Models;
+using TP3.Service;
 using static System.Net.WebRequestMethods;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +16,11 @@ builder.Services.AddDbContext<TP3Context>(options => {
     ?? throw new InvalidOperationException("Connection string 'TP3Context' not found."));
     options.UseLazyLoadingProxies();
 });
-// Add services to the container.
+// Add services to the container
 
 builder.Services.AddControllers();
+builder.Services.AddScoped<VoyagesService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

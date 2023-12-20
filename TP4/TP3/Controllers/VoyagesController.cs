@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using NuGet.Protocol.Plugins;
 using TP3.Data;
 using TP3.Models;
+using TP3.Service;
 
 namespace TP3.Controllers
 {
@@ -19,109 +20,39 @@ namespace TP3.Controllers
     [Authorize]
     public class VoyagesController : ControllerBase
     {
-        private readonly TP3Context _context;
-        UserManager<User> userManager;
 
-        public VoyagesController(TP3Context context, UserManager<User> userManager)
+		VoyagesService voyagesService;
+
+		public VoyagesController(VoyagesService service)
         {
-            _context = context;
-            this.userManager = userManager;
-        }
+            voyagesService = service;
+		}
 
         // GET: api/Voyages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyage()
         {
-            if (_context.Voyage == null)
-            {
-                return NotFound();
-            }
-            string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            User user = _context.Users.Single(u => u.Id == userid);
-
-            if (user != null)
-            {
-                return user.Voyages;
-            }
-
-            return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Utilisateur non trouvé." });
+			return await voyagesService.GetVoyages();
         }
 
         [HttpGet]
         [Route("[action]")]
         public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyagePublique()
         {
-            if (_context.Voyage == null)
-            {
-                return NotFound();
-            }
-
-            List<User> users = await _context.Users.ToListAsync();
-            List<Voyage> voyages = new List<Voyage>();
-
-            if (users != null)
-            {
-                foreach (var user in users)
-                {
-                    for (int i = 0; i < user.Voyages.Count; i++)
-                    {
-                        if (user.Voyages[i].Visible && !voyages.Contains(user.Voyages[i]))
-                        {
-                            voyages.Add(user.Voyages[i]);
-                        }
-                    }
-                }
-                return voyages;
-            }
-
-            return StatusCode(StatusCodes.Status400BadRequest, new { Message = "La liste est vide." });
+			return await voyagesService.GetVoyagesPubliques();
         }
-
-
 
         // GET: api/Voyages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Voyage>> GetVoyage(int id)
         {
-            if (_context.Voyage == null)
-            {
-                return NotFound();
-            }
-            var voyage = await _context.Voyage.FindAsync(id);
-
-            if (voyage == null)
-            {
-                return NotFound();
-            }
-
-            return voyage;
+			return await voyagesService.Get(id);
         }
 
         [HttpPut("{id}")]
 		public async Task<IActionResult> Partager(int id, string email)
         {
-            User user = await _context.Users.Where(res => res.Email == email).FirstOrDefaultAsync();
-            if(user == null)
-            {
-                return NotFound();
-            }
-
-            var voyage = await _context.Voyage.FindAsync(id);
-            if (voyage == null)
-            {
-                return NotFound();
-            }
-
-            if (user.Voyages.Contains(voyage))
-            {
-				return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Le user a déjà ce voyage." });
-			}
-            else
-            {
-				user.Voyages.Add(voyage);
-                await _context.SaveChangesAsync();
-				return Ok(new {Message = "Voyage ajouté à l'utilisateur."} );
-			}
+            return await voyagesService.PartagerService(id, email);
 		}
 
         // POST: api/Voyages
@@ -129,55 +60,14 @@ namespace TP3.Controllers
         [HttpPost]
         public async Task<ActionResult<Voyage>> PostVoyage(Voyage voyage)
         {
-            if (_context.Voyage == null)
-            {
-                return Problem("Entity set 'TP3Context.Voyage'  is null.");
-            }
-
-            string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            User user = _context.Users.Single(u => u.Id == userid);
-            if(user != null)
-            {
-                voyage.Users.Add(user);
-                user.Voyages.Add(voyage);
-
-				_context.Voyage.Add(voyage);
-				await _context.SaveChangesAsync();
-
-				return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);
-			}
-
-            return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Utilisateur non trouvé." });
+           return await voyagesService.Post(voyage);
         }
 
         // DELETE: api/Voyages/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVoyage(int id)
         {
-			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
-			User user = _context.Users.Single(u => u.Id == userid);
-
-            var voyage = await _context.Voyage.FindAsync(id);
-
-			if (_context.Voyage == null || user == null || voyage == null)
-            {
-                return NotFound();
-            }
-
-            if (!user.Voyages.Contains(voyage))
-            {
-                return Unauthorized(new { Message = "Ce Voyage ne t'appartient pas."});
-            }
-
-            _context.Voyage.Remove(voyage);
-            await _context.SaveChangesAsync();
-
-            return Ok(new {Message = "Voyage supprimé."});
-        }
-
-        private bool VoyageExists(int id)
-        {
-            return (_context.Voyage?.Any(e => e.Id == id)).GetValueOrDefault();
+            return await voyagesService.Delete(id);
         }
     }
 }

@@ -27,18 +27,16 @@ export class User{
   styleUrls: ['./voyages.component.css']
 })
 export class VoyagesComponent implements OnInit{
-
-  token: string | null = sessionStorage.getItem('token');
   voyages: Voyage[] = [];
   voyagesPublic: Voyage[] = [];
   public: boolean = true;
-  email_value: string = "";
   constructor(public http: HttpClient, public app: AppComponent){ }
-  async getVoyages(): Promise<void> {
-      let res = await  lastValueFrom(this.http.get<Voyage[]>(
-        'http://localhost:5042/api/Voyages'));
-      console.log(res);
-      this.voyages = res;
+
+  async getVoyages(): Promise<void>{
+    let res = await lastValueFrom(this.http.get<Voyage[]>(
+      "http://localhost:5042/api/Voyages"));
+    console.log(res);
+    this.voyages = res;
   }
 
   async getVoyagesPubliques(): Promise<void>{

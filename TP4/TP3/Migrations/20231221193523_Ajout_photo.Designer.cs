@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TP3.Data;
 
@@ -10,9 +11,11 @@ using TP3.Data;
 namespace TP3.Migrations
 {
     [DbContext(typeof(TP3Context))]
-    partial class TP3ContextModelSnapshot : ModelSnapshot
+    [Migration("20231221193523_Ajout_photo")]
+    partial class Ajout_photo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

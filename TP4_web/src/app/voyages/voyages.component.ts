@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {HttpClient, HttpEventType, HttpHeaders} from "@angular/common/http";
 import {NgForm} from "@angular/forms";
 import {AppComponent} from "../app.component";
 import {lastValueFrom} from "rxjs";
@@ -8,9 +8,17 @@ import {lastValueFrom} from "rxjs";
   constructor(
     public id: number,
     public name: string,
-    public img: string = "",
+    public img: string|null,
     public visible: boolean
   ) { }
+}
+
+export class Photo{
+   constructor(
+     public id: number,
+     public nomDuFicher: string,
+     public mimeType: string
+   ) {}
 }
 
 export class User{
@@ -20,12 +28,12 @@ export class User{
     public listVoyages?: Voyage[]
   ){}
 }
-
 @Component({
   selector: 'app-voyages',
   templateUrl: './voyages.component.html',
   styleUrls: ['./voyages.component.css']
 })
+
 export class VoyagesComponent implements OnInit{
   voyages: Voyage[] = [];
   voyagesPublic: Voyage[] = [];
@@ -59,14 +67,14 @@ export class VoyagesComponent implements OnInit{
     let voyage: Voyage = {
       id: 0,
       name: addVoyage.value.nom_voyage,
-      img: "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
+      img: null,
       visible: this.public
     }
     let res = await lastValueFrom(this.http.post<Voyage>('http://localhost:5042/api/Voyages', voyage))
     console.log(res);
     addVoyage.resetForm();
-    this.getVoyages();
-    this.getVoyagesPubliques();
+    await this.getVoyages();
+    await this.getVoyagesPubliques();
   }
 
   async partager(InputId: number, email: NgForm){

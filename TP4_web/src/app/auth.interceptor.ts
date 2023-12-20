@@ -17,7 +17,6 @@ export class AuthInterceptor implements HttpInterceptor {
     if(request.url != 'http://localhost:5042/api/Account/Login' && request.url != 'http://localhost:5042/api/Account/Register'){
       request = request.clone({
         setHeaders: {
-          'Content-Type': 'application/json',
           Authorization: 'Bearer ' + localStorage.getItem('token')
         }
       })

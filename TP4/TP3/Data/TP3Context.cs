@@ -42,7 +42,7 @@ namespace TP3.Data
             new Voyage()
             {
                 Id = 2,
-                Name="Algérie",
+                Name="Algerie",
                 Img = "https://www.routesdumonde.com/wp-content/uploads/2019/06/Thumbnail-Japon.jpg",
                 Visible = false
 			});
@@ -59,5 +59,8 @@ namespace TP3.Data
 		}
 
 		public DbSet<TP3.Models.Voyage> Voyage { get; set; } = default!;
+
+		public DbSet<TP3.Models.Photo> Photo { get; set; } = default!;
+
     }
 }

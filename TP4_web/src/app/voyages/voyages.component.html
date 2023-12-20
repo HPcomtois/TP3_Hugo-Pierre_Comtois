@@ -8,7 +8,7 @@
         <br><br>
         <h2>Visibilité du voyage</h2>
         <input name="visibilite" type="checkbox" [ngModelOptions]="{standalone: true}" [(ngModel)]="public" required>
-        <br><br>
+        <br><br><br>
         <button [hidden]="!app.connection">Ajouter ce voyage</button>
         <div [hidden]="app.connection">Connectez-vous pour ajouter un voyage</div>
       </form>
@@ -21,7 +21,7 @@
         <div class="conn">
           <h2>{{voyage.name}}</h2>
           <br><br>
-          <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
+          <img alt="img {{voyage.name}}" ngSrc="http://localhost:5042/api/Photos/GetPhoto/grosses/{{voyage.id}}" width="600" height="400">
           <div class="button">
             <button [routerLink]="['/voyage', voyage.id]">Ajouter des photos au voyage</button>
             <button (click)="delete(voyage.id)">Supprimer</button>
@@ -43,7 +43,7 @@
       <div class="conn">
         <h2>{{voyage.name}}</h2>
         <br><br>
-        <img alt="imgJapan" ngSrc="{{voyage.img}}" width="600" height="400">
+        <img alt="img {{voyage.name}}" ngSrc="http://localhost:5042/api/Photos/GetPhoto/grosses/{{voyage.id}}" width="600" height="400">
       </div>
     </div>
   </div>

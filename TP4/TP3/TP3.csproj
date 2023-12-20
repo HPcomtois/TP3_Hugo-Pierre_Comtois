@@ -7,18 +7,53 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="photos\grosses\0e6f2f6f-c677-4c10-bfa8-a558e382d8ca.jpg" />
+    <None Remove="photos\grosses\10290d03-1045-42ac-acb9-61865311172b.jpg" />
+    <None Remove="photos\grosses\1236d091-9744-4878-86c4-a4ed08f79541.jpg" />
+    <None Remove="photos\grosses\2b0e581d-10b9-4778-a11e-7abbce1f7657.jfif" />
+    <None Remove="photos\grosses\391cf9cc-1c16-421f-b72b-b8ee7fab4f21.jfif" />
+    <None Remove="photos\grosses\4a25f426-4b99-409a-a104-e0a5653f554c.jfif" />
+    <None Remove="photos\grosses\50faedfb-ad29-41ed-8c80-0b40b1e6caef.jfif" />
+    <None Remove="photos\grosses\55d98c3c-caeb-4161-a5b1-56728a59bde9.jfif" />
+    <None Remove="photos\grosses\5ab476cf-1a47-4a1e-a9cf-d207b1604bef.jpg" />
+    <None Remove="photos\grosses\5e4cf107-0b83-4673-9ca7-74f336fbe60b.jfif" />
+    <None Remove="photos\grosses\5eb8eb78-4e74-40ec-824a-377cbee4ae09.jpg" />
+    <None Remove="photos\grosses\7e897474-7f14-497d-8967-8fdf113d949e.jfif" />
+    <None Remove="photos\grosses\83901718-cdb0-41ac-941a-0b88c496fd14.jfif" />
+    <None Remove="photos\grosses\9ec50a31-2592-430d-9ec3-7fd71915e9e1.jpg" />
+    <None Remove="photos\grosses\b4172ba5-dbbc-4209-ae3a-9afd992e218d.jfif" />
+    <None Remove="photos\grosses\d5df9af5-14c7-4089-bc61-e3ecda2b6f92.jfif" />
+    <None Remove="photos\grosses\d62ec04a-8cf1-41ce-900c-30c4f3ff9bc6.jpg" />
+    <None Remove="photos\grosses\dd25ccd6-8626-47ff-b2c1-d08e5403f603.jfif" />
+    <None Remove="photos\grosses\e55a26c1-5cab-4108-abc4-b4d289c4175a.jpg" />
+    <None Remove="photos\grosses\f37cfc6b-b364-424f-8e2a-7dece64a901e.jfif" />
+    <None Remove="photos\grosses\f404a0e2-182d-4523-9503-aa8a8aa6bfb5.jpg" />
+    <None Remove="photos\grosses\f8a22078-fa0b-4cf4-ad15-eefbd0d1b9f9.jfif" />
+    <None Remove="photos\grosses\fd0f3a36-1acb-4443-91b5-b077a46e1147.jfif" />
+    <None Remove="photos\petites\0e6f2f6f-c677-4c10-bfa8-a558e382d8ca.jpg" />
+    <None Remove="photos\petites\10290d03-1045-42ac-acb9-61865311172b.jpg" />
+    <None Remove="photos\petites\5eb8eb78-4e74-40ec-824a-377cbee4ae09.jpg" />
+    <None Remove="photos\petites\9ec50a31-2592-430d-9ec3-7fd71915e9e1.jpg" />
+    <None Remove="photos\petites\d62ec04a-8cf1-41ce-900c-30c4f3ff9bc6.jpg" />
+    <None Remove="photos\petites\e55a26c1-5cab-4108-abc4-b4d289c4175a.jpg" />
+    <None Remove="photos\petites\f404a0e2-182d-4523-9503-aa8a8aa6bfb5.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="7.0.13" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.12" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.13" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="7.0.13" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 

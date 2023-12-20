@@ -6,6 +6,11 @@
 
     </div>
   </div>
-  <img class="img" src="{{voyage.img}}">
+  <img alt="Photo de {{voyage.name}}" class="img" src="http://localhost:5042/api/Photos/GetPhoto/grosses/{{voyage.id}}">
+  <form enctype="multipart/form-data" (ngSubmit)="uploadPhoto(voyage.id)">
+    <h6>Ajouter une image au Voyage</h6>
+    <input #_fileUploadViewChild type="file" name="image"  accept="images/*"/>
+    <button>Charger l'image</button>
+  </form>
 </div>
 

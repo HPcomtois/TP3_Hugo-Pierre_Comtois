@@ -30,44 +30,101 @@ namespace TP3.Controllers
 
         // GET: api/Voyages
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyage()
+        public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyages()
         {
-			return await voyagesService.GetVoyages();
+			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			List<Voyage>? voyages = await voyagesService.GetAll(userid);
+            if(voyages == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Aucun voyage détecté." });
+            }
+			return voyages;
         }
 
         [HttpGet]
         [Route("[action]")]
         public async Task<ActionResult<IEnumerable<Voyage>>> GetVoyagePublique()
         {
-			return await voyagesService.GetVoyagesPubliques();
-        }
+			List<Voyage>? voyages = await voyagesService.GetVoyagesPubliques();
+            if(voyages == null)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, new { Message = "La liste est vide." });
+			}
+            else
+            {
+                return voyages;
+            }
+		}
 
         // GET: api/Voyages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Voyage>> GetVoyage(int id)
         {
-			return await voyagesService.Get(id);
+            Voyage? voyage = await voyagesService.Get(id);
+            if(voyage == null)
+            {
+                return NotFound("Voyage introuvalbe.");
+            }
+            else
+            {
+                return voyage;
+            }
         }
 
         [HttpPut("{id}")]
 		public async Task<IActionResult> Partager(int id, string email)
         {
-            return await voyagesService.PartagerService(id, email);
+            User? user = await voyagesService.GetUser(email);
+            if(user == null)
+            {
+                return NotFound("Utilisateur introuvable.");
+            }
+            else
+            {
+				Voyage? voyage = await voyagesService.Get(id);
+
+				if (user.Voyages.Contains(voyage))
+				{
+					return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Le user a déjà ce voyage." });
+				}
+				else
+				{
+                    user.Voyages.Add(voyage);
+					return Ok(new { Message = "Voyage ajouté à l'utilisateur." });
+				}
+			}
 		}
 
         // POST: api/Voyages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Voyage>> PostVoyage(Voyage voyage)
+        public async Task<ActionResult<Voyage>> PostVoyage(Voyage? voyage)
         {
-           return await voyagesService.Post(voyage);
-        }
+			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			voyage = await voyagesService.Post(voyage, userid);
+			if (voyage.Users == null)
+			{
+				return StatusCode(StatusCodes.Status400BadRequest, new { Message = "Utilisateur non trouvé." });
+			}
+            else
+            {
+				return CreatedAtAction("GetVoyage", new { id = voyage.Id }, voyage);
+			}
+		}
 
         // DELETE: api/Voyages/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteVoyage(int id)
         {
-            return await voyagesService.Delete(id);
-        }
+			string userid = User.FindFirstValue(ClaimTypes.NameIdentifier);
+			Voyage voyage = await voyagesService.Get(id);
+            if (voyage == null)
+            {
+                return NotFound("Le voyage n'a pas pu être supprimé.");
+            }
+            voyage = await voyagesService.Delete(id, userid);
+
+            return Ok(new { Message = "Voyage supprimé." });
+		}
     }
 }

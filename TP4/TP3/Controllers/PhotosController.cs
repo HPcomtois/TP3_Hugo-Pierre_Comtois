@@ -30,15 +30,16 @@ namespace TP3.Controllers
         }
 
         // GET: api/Photos
-        [HttpGet("{id}/{idVoyage}")]
+        [HttpGet("{idVoyage}")]
         public async Task<ActionResult<IEnumerable<Photo>>> GetPhotosVoyage(int idVoyage)
         {
-            Voyage voyage = await _context.Voyage.FindAsync(idVoyage);
-            if (_context.Photo == null)
+            if(idVoyage == 0)
             {
-                return NotFound();
+                return NotFound("Le voyage n'existe pas.");
             }
-            return voyage.Photos;
+            Voyage? voyage = await _context.Voyage.FindAsync(idVoyage);
+            List<Photo> photos = voyage!.Photos;
+			return photos;
         }
 
         // GET: api/Photos/5
@@ -66,36 +67,29 @@ namespace TP3.Controllers
             return File(bytes, photo.MimeType);
         }
 
-        // PUT: api/Photos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutPhoto(int id, Photo photo)
-        {
-            if (id != photo.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(photo).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PhotoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
+		[HttpGet]
+		[AllowAnonymous]
+		[Route("[action]/{size}/{idPhoto}")]
+		public async Task<ActionResult<Photo>> GetPhotoById(string size, int idPhoto)
+		{
+			if (_context.Photo == null)
+			{
+				return NotFound();
+			}
+			Photo? photo = await _context.Photo.Where
+						(id => id.Id == idPhoto).SingleOrDefaultAsync();
+			if (photo == null || photo.NomDuFichier == null || photo.MimeType == null)
+			{
+				byte[] org = System.IO.File.ReadAllBytes(Directory.GetCurrentDirectory() + "/photos/" + size + "/" + "Star_of_David3.svg.png");
+				return File(org, "image/png");
+			}
+			if (!Regex.Match(size, "grosses|petites").Success)
+			{
+				return BadRequest(new { Message = "Taille est mauvaise." });
+			}
+			byte[] bytes = System.IO.File.ReadAllBytes(Directory.GetCurrentDirectory() + "/photos/" + size + "/" + photo.NomDuFichier);
+			return File(bytes, photo.MimeType);
+		}
 
         [DisableRequestSizeLimit]
         [Route("[action]/{id}")]
@@ -154,7 +148,30 @@ namespace TP3.Controllers
             }
         }
 
-        private bool PhotoExists(int id)
+        [HttpDelete("{idPhoto}")]
+        public async Task<IActionResult> DeletePhoto(int idPhoto)
+        {
+            if(_context.Photo == null)
+            {
+                return NotFound();
+            }
+            Photo? photo = await _context.Photo.FindAsync(idPhoto);
+            if(photo == null)
+            {
+                return NotFound(new {Message = "La photo n'existe pas."});
+            }
+            if(photo.MimeType != null && photo.NomDuFichier != null)
+            {
+                System.IO.File.Delete(Directory.GetCurrentDirectory() + "/photos/petites/" + photo.NomDuFichier);
+				System.IO.File.Delete(Directory.GetCurrentDirectory() + "/photos/grosses/" + photo.NomDuFichier);
+			}
+            _context.Remove(photo);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+		}
+
+		private bool PhotoExists(int id)
         {
             return (_context.Photo?.Any(e => e.Id == id)).GetValueOrDefault();
         }

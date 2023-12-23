@@ -14,24 +14,30 @@
 
 .content{
   display: grid;
+  align-content: center;
   grid-auto-columns: 1fr 1fr 1fr;
-  margin: 0 0 0 3%;
+  margin: 1%;
+  padding: 2%;
   border: 4px solid black;
-  font-size: 27px;
+  font-size: 25px;
   font-weight: normal;
   background-color: aliceblue;
+  width: fit-content;
+  height: auto;
 }
 
 .photos{
   border: 2px dashed black;
-  margin-top: 2%;
+  width: fit-content;
+  height: auto;
+  margin: 1%;
   padding: 3%;
-  font-size: 24px;
+  justify-content: center;
+  align-items: center;
 }
 
 .img{
   padding: 1%;
-  font-size: 15px;
 }
 
 .titre{

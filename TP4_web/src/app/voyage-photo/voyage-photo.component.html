@@ -1,11 +1,16 @@
 <div class="card">
   <div class="titre">{{voyage.name}}</div>
   <div class="content">
-    Photos du voyage :
-    <div class="photos" *ngFor="let photo of photos">
-      <img alt="Photo {{photo.id}}" class="img"
-           src="http://localhost:5042/api/Photos/GetPhotoById/petites/{{photo.id}}">
-      <button (click)="deletePhoto(photo.id)">Supprimer la photo</button>
+    Photos du {{voyage.name}} :
+    <div class="photos" #masongrid >
+      <div #masongriditems class="grid-item" *ngFor="let photo of photos">
+        <div *ngIf="this.bigPhoto.id != photo.id">
+          <img alt="Photo {{photo.id}}"
+               src="http://localhost:5042/api/Photos/GetPhotoById/petites/{{photo.id}}">
+        </div>
+        <button (click)="deletePhoto(photo.id)">Supprimer la photo</button>
+        <button (click)="photoBig(photo.id)">Sélectionner l'image</button>
+      </div>
     </div>
   </div>
   <img alt="Photo de {{voyage.name}}" class="img" src="http://localhost:5042/api/Photos/GetPhoto/grosses/{{voyage.id}}"
@@ -16,4 +21,10 @@
     <button>Charger l'image</button>
   </form>
 </div>
+<div class="selection" *ngIf="localStorage.getItem('bigPic') != null">
+  <img alt="Image Sélectionnée"
+       src="http://localhost:5042/api/Photos/GetPhotoById/grosses/{{JSON.parse(localStorage.getItem('bigPic')!)}}">
+  <button (click)="enlever()">Enlever l'image sélectionnée</button>
+</div>
+
 

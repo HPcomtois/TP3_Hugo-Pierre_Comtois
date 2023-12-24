@@ -2,20 +2,18 @@
   border: 5px solid black;
   width: fit-content;
   height: auto;
-  padding: 2%;
+  padding: 25px;
   margin: 0 5% 0 5%;
   display: flex;
-  justify-content: center;
-  align-items: center;
   background-color: darkcyan;
   font-size: 32px;
   font-weight: bold;
+  align-items:center;
 }
 
 .content{
   display: grid;
-  align-content: center;
-  grid-auto-columns: 1fr 1fr 1fr;
+  grid-auto-columns: 1fr;
   margin: 1%;
   padding: 2%;
   border: 4px solid black;
@@ -28,18 +26,38 @@
 
 .photos{
   border: 2px dashed black;
-  width: fit-content;
-  height: auto;
   margin: 1%;
   padding: 3%;
-  justify-content: center;
-  align-items: center;
+  width: 175px;
+  height: auto;
 }
 
 .img{
   padding: 1%;
 }
 
-.titre{
+.grid-item{
+  margin-bottom: 3px;
+  width: fit-content;
+  height: auto;
+}
 
+.grid-item img{
+  width: 140px;
+  padding: 2%;
+}
+
+.titre{
+  align-self: start;
+}
+
+.selection{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2%;
+  & button {
+    padding: 10px;
+    margin: 2%;
+  }
 }

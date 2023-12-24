@@ -42,8 +42,20 @@ namespace TP3.Controllers
 			return photos;
         }
 
-        // GET: api/Photos/5
-        [HttpGet]
+		[HttpGet]
+        [Route("[action]/{idPhoto}")]
+		public async Task<ActionResult<Photo>> GetPhotoVoyage(int idPhoto)
+		{
+			if (idPhoto == 0)
+			{
+				return NotFound("La Photo n'existe pas.");
+			}
+			Photo? photo = await _context.Photo.FindAsync(idPhoto);
+			return photo!;
+		}
+
+		// GET: api/Photos/5
+		[HttpGet]
         [AllowAnonymous]
         [Route("[action]/{size}/{id}")]
         public async Task<ActionResult<Photo>> GetPhoto(string size, int id)
